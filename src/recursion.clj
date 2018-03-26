@@ -200,11 +200,36 @@
     )
   )
 
+(defn better-halve [a-seq]
+  (let [half (int (/ (count a-seq) 2))]
+    [(my-take half a-seq)
+     (my-drop half a-seq)]))
+
+
 (defn seq-merge [a-seq b-seq]
-  [:-])
+  (let [firsta (first a-seq)
+        firstb (first b-seq)]
+    (cond
+      (empty? (and a-seq b-seq)) '()
+      (empty? a-seq) b-seq
+      (empty? b-seq) a-seq
+      (< firsta firstb) (cons firsta (seq-merge (rest a-seq) b-seq))
+      :else (cons firstb (seq-merge (rest b-seq) a-seq))
+      )
+    )
+  )
 
 (defn merge-sort [a-seq]
-  [:-])
+  (let [half (halve a-seq)
+        start (first half)
+        end (first (reverse half))]
+    (cond
+      (or (empty? a-seq) (singleton? a-seq)) a-seq
+;;       :else (apply seq-merge (map merge-sort half))
+      :else (seq-merge (merge-sort start) (merge-sort end))
+      )
+    )
+  )
 
 (defn split-into-monotonics [a-seq]
   [:-])
